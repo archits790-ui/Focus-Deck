@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- SEO Meta Tags -->
+  <title>Focus-Deck | Free Online Task Manager, Study Planner & Offline Productivity Dashboard</title>
+  <meta name="title" content="Focus-Deck | Free Productivity Dashboard & Pomodoro Timer">
+  <meta name="description" content="A privacy-focused, offline productivity dashboard featuring a customizable Pomodoro timer, ambient sound mixer, kanban-style to-do list, syllabus tracker, and flashcards. No login required.">
+  <meta name="keywords" content="productivity dashboard, pomodoro timer, study planner, ambient sounds, focus timer, syllabus tracker, flashcards maker, local storage app, student tools, task manager, offline productivity, archits790-ui">
+  <meta name="author" content="Archit Singh">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0f1115">
+  <meta name="google-site-verification" content="jpvEHaJevX_AKw7jZpbU6NofpR6HcFMQ5MDkMuTPWj0" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://archits790-ui.github.io/Focus-Deck/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://archits790-ui.github.io/Focus-Deck/">
+  <meta property="og:title" content="Focus-Deck | Free Productivity Dashboard & Pomodoro Timer">
+  <meta property="og:description" content="Boost your focus with this all-in-one dashboard. Features a Pomodoro timer, ambient mixer, task tracking, and study tools. 100% Free & Private.">
+  <meta property="og:image" content="https://archits790-ui.github.io/Focus-Deck/unnamed-removebg-preview.png">
+  <meta property="og:site_name" content="Focus-Deck">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://archits790-ui.github.io/Focus-Deck/">
+  <meta property="twitter:title" content="Focus-Deck | Free Productivity Dashboard & Pomodoro Timer">
+  <meta property="twitter:description" content="Boost your focus with this all-in-one dashboard. Features a Pomodoro timer, ambient mixer, task tracking, and study tools. 100% Free & Private.">
+  <meta property="twitter:image" content="https://archits790-ui.github.io/Focus-Deck/unnamed-removebg-preview.png">
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Focus-Deck",
+    "url": "https://archits790-ui.github.io/Focus-Deck/",
+    "description": "A local-storage based productivity dashboard for students and professionals.",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Web Browser",
+    "author": {
+      "@type": "Person",
+      "name": "Archit Singh",
+      "url": "https://github.com/archits790-ui"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "screenshot": "https://archits790-ui.github.io/Focus-Deck/unnamed-removebg-preview.png",
+    "featureList": "Pomodoro Timer, To-Do List, Syllabus Tracker, Flashcards, Ambient Sounds"
+  }
+  </script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./unnamed-removebg-preview.png">
+  <link rel="apple-touch-icon" href="./unnamed-removebg-preview.png">
+  <!-- Google Fonts for Sticky Notes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Logo Image -->
+  <img src="unnamed-removebg-preview.png"
+    style="position: fixed; top: 5px; left: 0px; width: 50px; height: 50px; z-index: 1000;">
+
+  <div class="app" id="app">
+    <!-- ===== HEADER ===== -->
+    <header>
+      <div class="header-wrap">
+        <div class="brand">
+          <div id="streakCounter" class="badge" title="Your current focus streak">0 <span class="fire-emoji">🔥</span></div>
+          <div class="greet" id="greet">Good Day</div>
+          <div class="clock" id="clock">--:--</div>
+        </div>
+        <div class="controls">
+          <select id="workspaceSelect" title="Workspaces"></select>
+          <button id="addWorkspace" class="ghost" title="Add workspace">＋</button>
+          <button id="delWorkspace" class="ghost" title="Delete workspace">🗑</button>
+        </div>
+        <div class="controls">
+          <button id="themeToggleBtn" class="ghost" title="Toggle Theme" style="font-size: 18px; padding: 8px; line-height: 1;">☀️</button>
+          <!-- Search Wrapper for Dropdown -->
+          <div class="search-wrapper" style="position: relative;">
+            <input id="globalSearch" type="text" placeholder="Global search (tasks, topics)" autocomplete="off" />
+            <div id="searchSuggestions" class="search-suggestions"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+      <!-- ===== LEFT COLUMN ===== -->
+      <div class="left-column">
+
+        <!-- Focus Timer Card -->
+        <section class="card" id="timerCard">
+          <div class="card-header">
+            <div class="card-title">Focus Timer</div>
+            <div class="row">
+              <select id="mode">
+                <option value="focus">Focus</option>
+                <option value="short">Short Break</option>
+                <option value="long">Long Break</option>
+              </select>
+              <button class="icon-btn expand-btn" data-target="timerCard" title="Expand">↗</button>
+            </div>
+          </div>
+          <div class="card-body" style="align-items:center;text-align:center">
+            <div id="display" style="font-size:48px">25:00</div>
+            <div class="row">
+              <button class="accent" id="start" title="Hotkey: Space">Start</button>
+              <button id="pause" title="Hotkey: Space">Pause</button>
+              <button id="reset">Reset</button>
+            </div>
+            <div class="badge" id="timerStatus">Idle</div>
+            <div id="cycleDisplay" class="badge" style="margin-top: 8px;">Cycle 1 / 4</div>
+            
+            <!-- Ambient Sounds Mixer -->
+            <div class="sound-mixer" style="margin-top: 16px; width: 100%; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+                <div class="sound-control-row">
+                    <button class="icon-btn sound-toggle" data-sound="rain" title="Rain">🌧️</button>
+                    <input type="range" class="volume-slider" data-sound="rain" min="0" max="1" step="0.1" value="0.5">
+                </div>
+                <div class="sound-control-row">
+                    <button class="icon-btn sound-toggle" data-sound="forest" title="Forest">🌲</button>
+                    <input type="range" class="volume-slider" data-sound="forest" min="0" max="1" step="0.1" value="0.5">
+                </div>
+                <div class="sound-control-row">
+                    <button class="icon-btn sound-toggle" data-sound="cafe" title="White Noise">🌫️</button>
+                    <input type="range" class="volume-slider" data-sound="cafe" min="0" max="1" step="0.1" value="0.5">
+                </div>
+            </div>
+          </div>
+          <div class="timer-settings">
+            <div class="settings-group">
+              <span class="badge">Cycles until Long Break:</span>
+              <input id="longBreakInterval" type="number" min="1" style="width:60px"
+                title="Number of Focus sessions before a Long Break">
+            </div>
+            <button id="saveTimerSettings" class="accent">Save Settings</button>
+          </div>
+          <!-- Audio Elements (Placeholders) -->
+          <audio id="audio-rain" src="rain.mp3" loop></audio>
+          <audio id="audio-forest" src="forest.mp3" loop></audio>
+          <audio id="audio-cafe" src="cafe.mp3" loop></audio>
+          <audio id="alarmSound" src="https://www.soundjay.com/buttons/sounds/button-1.mp3" preload="auto"></audio>
+        </section>
+
+        <!-- Streak Info Card -->
+        <section class="card" id="streakInfoCard">
+          <div class="card-header">
+            <div class="card-title">Streak Info</div>
+            <div class="row">
+              <button class="icon-btn expand-btn" data-target="streakInfoCard" title="Expand">↗</button>
+            </div>
+          </div> 
+          <div class="card-body">
+            <div class="streak-info-grid">
+              <div class="streak-info-item">
+                <div class="label">Current Streak</div>
+                <div class="value" id="currentStreakDisplay">0</div>
+              </div>
+              <div class="streak-info-item">
+                <div class="label">Longest Streak</div>
+                <div class="value" id="longestStreakDisplay">0</div>
+              </div>
+              <div class="streak-info-item expanded-only">
+                <div class="label">Total Days Used</div>
+                <div class="value" id="totalDaysDisplay">0</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Badges Card -->
+        <section class="card" id="badgesCard">
+          <div class="card-header">
+            <div class="card-title">Badges</div>
+            <div class="row">
+              <button class="icon-btn expand-btn" data-target="badgesCard" title="Expand">↗</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Badges will be dynamically rendered by script.js -->
+          </div>
+        </section>
+
+      </div> <!-- End Left Column -->
+
+      <!-- ===== RIGHT COLUMN ===== -->
+      <div class="right-column">
+
+        <!-- Tab Navigation -->
+        <div class="right-nav-tabs">
+          <button class="tab" data-target="todoCard">To-Do & History</button>
+          <button class="tab" data-target="syllabusCard">Syllabus</button>
+          <button class="tab" data-target="timetableCard">Timetable</button>
+          <button class="tab" data-target="analyticsCard">Analytics</button>
+          <button class="tab" data-target="stickyNotesCard">Sticky Notes</button>
+          <button class="tab" data-target="flashcardsCard">Flashcards</button>
+          <button class="tab" data-target="journalCard">Journal</button>
+          <button class="tab" data-target="calendarCard">Calendar</button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="right-content-area">
+
+          <!-- To-Do Card -->
+          <section class="card" id="todoCard">
+            <div class="card-header">
+              <div class="card-title">To-Do & History</div>
+              <div class="row">
+                <div class="tabs">
+                  <div class="tab active" data-tab="todo">To-Do</div>
+                  <div class="tab" data-tab="done">Completed</div>
+                </div>
+                <button class="icon-btn expand-btn" data-target="todoCard" title="Expand">↗</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row" id="todoInputRow">
+                <input id="todoInput" type="text" placeholder="New task... (Hotkey: N)" />
+                <button id="addTask" class="accent">Add</button>
+                <br>
+              </div>
+              <div id="todoList" class="list"></div>
+              <div id="doneList" class="list" style="display:none"></div>
+              <div class="row" id="doneActions" style="display:none;justify-content:flex-end">
+                <button id="clearDone" class="ghost">Clear All</button>
+              </div>
+              <div class="row" id="todoSearchRow" style="display:none;justify-content:flex-end">
+                <input id="todoSearch" type="text" placeholder="Search To-Do..."/>
+              </div>
+            </div>
+          </section>
+
+          <!-- Syllabus Card -->
+          <section class="card" id="syllabusCard">
+            <div class="card-header">
+              <div class="row">
+                <button id="syllabusNavPrev" class="icon-btn" title="Previous Page">ᐊ</button>
+                <input id="syllabusPageTitle" type="text" style="width: 120px; text-align: center; font-weight: 600;"
+                  value="Main" />
+                <button id="syllabusNavNext" class="icon-btn" title="Next Page">ᐅ</button>
+              </div>
+              <div class="row">
+                <button id="manageSyllabusPages" class="ghost">Manage</button>
+                <button id="expandSyllabus" class="icon-btn expand-btn" data-target="syllabusCard"
+                  title="Expand">↗</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row"
+                style="padding: 0 4px 8px; border-bottom: 1px solid rgba(255,255,255,.04); margin-bottom: 8px;">
+                <input id="subjectName" type="text" placeholder="New subject..." style="flex-grow:1" />
+                <button id="addSubject" class="accent">Add Subject</button>
+              </div>
+              <div class="row"
+                style="padding: 0 4px 8px; border-bottom: 1px solid rgba(255,255,255,.04); margin-bottom: 8px;">
+                <input id="syllabusSearch" type="text" placeholder="Search Syllabus..." style="flex-grow:1"/>
+              </div>
+              <div id="subjects" class="list"></div>
+            </div>
+          </section>
+
+          <!-- Analytics Card -->
+          <section class="card" id="analyticsCard">
+            <div class="card-header">
+              <div class="card-title">Performance Analytics</div>
+              <div class="row">
+                <div class="tabs analytics-tabs">
+                  <div class="tab active" data-tab="syllabus">Syllabus</div>
+                  <div class="tab" data-tab="todo">To-Do</div>
+                  <div class="tab" data-tab="timetable">Timetable</div>
+                </div>
+                <select id="analyticsSubjectSelect"></select>
+                <button class="icon-btn expand-btn" data-target="analyticsCard" title="Expand">↗</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="canvas-wrap" style="min-height: 250px;"><canvas id="mainChart"></canvas></div>
+            </div>
+          </section>
+
+          <!-- Timetable Card -->
+          <section class="card" id="timetableCard">
+            <div class="card-header">
+              <div class="card-title">Weekly Timetable</div>
+              <div class="row">
+                <button id="uncheckTimetable" class="ghost" title="Uncheck all completed items">Uncheck</button>
+                <button id="resetTimetable" class="ghost" title="Clear all activities">Reset</button>
+                <button id="manageRows" class="ghost">Manage Rows</button>
+                <button id="addBlock" class="accent">➕</button>
+                <button class="icon-btn expand-btn" data-target="timetableCard" title="Expand">↗</button>
+              </div>
+            </div>
+            <div class="card-body timetable">
+              <table class="table" id="timetable"></table>
+            </div>
+          </section>
+
+          <!-- Sticky Notes Card -->
+          <section class="card" id="stickyNotesCard">
+            <div class="card-header">
+              <div class="card-title">Sticky Notes</div>
+              <div class="row">
+                <button class="icon-btn expand-btn" data-target="stickyNotesCard" title="Expand">↗</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="stickyNotesCanvas"></div>
+              <button id="addStickyNoteBtn" class="accent" title="Add New Sticky Note">＋ Note</button>
+            </div>
+          </section>
+
+          <!-- Flashcards Card -->
+          <section class="card" id="flashcardsCard">
+            <div class="card-header">
+                <div class="card-title">Flashcards</div>
+                <div class="row">
+                    <input id="flashcardSearch" type="text" placeholder="Search cards..." style="width: 200px; font-size: 12px; padding: 4px 8px;">
+                    <button class="icon-btn expand-btn" data-target="flashcardsCard" title="Expand">↗</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" style="margin-bottom: 12px;">
+                    <button id="createFlashcardDeckBtn" class="accent" style="flex-grow:1">+ New Deck</button>
+                </div>
+                <div id="flashcardsContainer" class="flashcards-grid"></div>
+            </div>
+          </section>
+
+          <!-- Journal Card -->
+          <section class="card" id="journalCard">
+            <div class="card-header">
+                <div class="card-title">Daily Journal</div>
+                <div class="row">
+                    <button class="icon-btn expand-btn" data-target="journalCard" title="Expand">↗</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="journal-input-area">
+                    <div class="row" style="margin-bottom: 8px;">
+                        <input type="date" id="journalDate" style="background: var(--panel); border: 1px solid rgba(255,255,255,0.1); color: var(--text); border-radius: 6px; padding: 4px;">
+                        <button id="saveJournalEntry" class="accent">Save Entry</button>
+                    </div>
+                    <textarea id="journalText" placeholder="What did you achieve today?" style="width: 100%; height: 80px; resize: vertical; margin-bottom: 16px;"></textarea>
+                </div>
+                <div id="journalEntriesList" class="list"></div>
+            </div>
+          </section>
+
+          <!-- Calendar Card -->
+          <section class="card" id="calendarCard">
+            <div class="card-header">
+              <div class="card-title">History Calendar</div>
+              <div class="row">
+                <button class="icon-btn expand-btn" data-target="calendarCard" title="Expand">↗</button>
+              </div>
+            </div>
+            <div class="card-body calendar-container">
+              <div class="calendar-header">
+                <button id="calendarPrev" class="icon-btn">ᐊ</button>
+                <div id="calendarMonthYear"></div>
+                <button id="calendarNext" class="icon-btn">ᐅ</button>
+              </div>
+              <div class="calendar-body">
+                <div class="calendar-grid" id="calendarGrid"></div>
+              </div>
+            </div>
+          </section>
+
+        </div> <!-- End Content Area -->
+      </div> <!-- End Right Column -->
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">100% local. Data stored in your browser. Schema v6. <br> Developed by <strong>Archit Singh.</strong></div>
+  </div>
+
+  <!-- ===== SETTINGS BAR ===== -->
+  <div class="settings-bar" id="settingsBar">
+    <div class="settings-group">
+      <span class="badge">Accent:</span>
+      <div id="accentPalette" class="row"></div>
+    </div>
+    <div class="settings-group">
+      <span class="badge">Timer (Focus/Short/Long):</span>
+      <input id="durFocus" type="number" min="1" style="width:60px" title="Focus Duration (minutes)">
+      <input id="durShort" type="number" min="1" style="width:60px" title="Short Break (minutes)">
+      <input id="durLong" type="number" min="1" style="width:60px" title="Long Break (minutes)">
+      <button id="saveDur" class="accent">Save</button>
+    </div>
+    <div class="settings-group">
+      <a href="About.html" id="aboutLink" class="settings-about-link">About Us</a>
+      <button id="importData" class="ghost" title="Import Data">📥</button>
+      <button id="exportData" class="ghost" title="Export Data">📤</button>
+      <button id="openResetSettings" class="ghost" title="Reset Settings">🔄</button>
+    </div>
+  </div>
+
+  <!-- ===== CORNER CONTROLS ===== -->
+  <div id="corner-controls" class="corner-controls">
+    <button id="toggleSettingsBtn" class="ghost" title="Settings" style="font-size: 18px; padding: 8px; line-height: 1;">⚙️</button>
+  </div>
+
+  <!-- ===== OVERLAYS ===== -->
+  <div id="modal" class="modal">
+    <div id="modalCard" class="modal-card"></div>
+  </div>
+  <div id="context-menu" class="context-menu" aria-hidden="true"></div>
+  <div id="chartTooltip"></div>
+  <div id="dateTooltip"></div>
+  <div id="timetableTooltip"></div>
+
+  <!-- Dynamic Styles Holder -->
+  <style id="custom-colors-style"></style>
+
+  <!-- External Script -->
+  <script src="script.js"></script>
+</body>
+</html>
